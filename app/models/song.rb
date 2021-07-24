@@ -3,7 +3,7 @@ class Song < ActiveRecord::Base
   belongs_to :artist
   belongs_to :genre
   has_many :notes
-  accepts_nested_attributes_for :notes
+  # accepts_nested_attributes_for :notes
 
   def artist_name=(name)
     self.artist = Artist.find_or_create_by(name: name)
@@ -13,15 +13,18 @@ class Song < ActiveRecord::Base
     self.artist ? self.artist.name : nil
   end
 
-  # def note_ids=(ids)
-  #   ids.each do |id|
-  #     note = Note.find(id)
-  #     self.notes << note
-  #   end
-  # end
+  def note_contents=(contents)
+    contents.each do |c| #need to account for the fact that this might be nil 
+      # byebug
+      note = self.notes.build(content: c)
+    end
+  end
 
-  # def note_ids
-  #   self.notes ? self.note_ids :nil
-  # end
+  def note_contents
+    # self.notes ? self.note_contents :nil
+    self.notes.map do |note|
+      note.content
+    end
+  end
 
 end
